@@ -28,6 +28,7 @@ app.get('/:id',(req, res)=>{
     console.log(req.params)
     res.json(obj)
 })
+// menambah data
 app.post('/',(req,res) => {
     const {nama, umur, alamat} = req.body
     const id = Number(new Date)
@@ -35,6 +36,7 @@ app.post('/',(req,res) => {
     data.push({id, nama, umur, alamat})
     res.json('Data berhasil ditambah')
 })
+// edit data
 app.put('/:id',(req,res)=>{
     const {nama, umur, alamat} = req.body
     const id = req.params.id
@@ -46,6 +48,7 @@ app.put('/:id',(req,res)=>{
     }
     res.json('data berhasil diubah')
 })
+// delete data
 app.delete('/:id',(req,res)=>{
     const id = req.params.id
     const newData = data.filter(item => item.id != id)
