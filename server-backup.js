@@ -34,10 +34,11 @@ app.get('/',async(req, res)=>{
     const resData = await db.query('select * from users')
     res.json(resData.rows)
 })
-app.get('/:id',async(req, res)=>{
+app.get('/:id',(req, res)=>{
     const id = req.params.id
-    const resData = await db.query(`select * from users where id=${id}`)
-    res.json(resData.rows[0])
+    const obj = data.find(item=>item.id == id)
+    console.log(req.params)
+    res.json(obj)
 })
 // menambah data
 app.post('/',(req,res) => {
