@@ -16,23 +16,25 @@ const db = new Pool({
 
 
 app.use(bodyParser())
+// get seluruh pegawai
 app.get('/pegawai',async(req, res)=>{
     const resData = await db.query('select * from pegawai')
     res.json(resData.rows)
 })
+// get pegawai by id
 app.get('/pegawai/:id',async(req, res)=>{
     const id = req.params.id
     const resData = await db.query(`select * from pegawai where id=${id}`)
     res.json(resData.rows)
 })
-// menambah data
+// menambah data pegawai
 app.post('/pegawai',(req,res) => {
     const {nama, alamat, jabatan} = req.body
     const resData = await db.query(`insert into pegawai(nama, alamat, jabatan) values('${nama}', '${alamat}', '${jabatan}')`)
     console.log(req.body)
     res.json('Data berhasil ditambah')
 })
-// edit data
+// edit jabatan pegawai
 app.put('/pegawai',(req,res)=>{
     const {nama, alamat, jabatan} = req.body
     const id = req.params.id
@@ -40,7 +42,7 @@ app.put('/pegawai',(req,res)=>{
     const resData = await db.query(`update pegawai set jabatan = '${jabatan}' where jabatan = '${jabatan}'`)
     res.json('data berhasil diubah')
 })
-// delete data
+// delete data pegawai by id
 app.delete('/pegawai/:id',(req,res)=>{
     const id = req.params.id
     const resData = await db.query(`DELETE FROM pegawai WHERE id = ${id}`)
