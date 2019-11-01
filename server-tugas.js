@@ -28,24 +28,31 @@ app.get('/pegawai/:id',async(req, res)=>{
     res.json(resData.rows)
 })
 // menambah data pegawai
-app.post('/pegawai',(req,res) => {
-    const {nama, alamat, jabatan} = req.body
-    const resData = await db.query(`insert into pegawai(nama, alamat, jabatan) values('${nama}', '${alamat}', '${jabatan}')`)
-    console.log(req.body)
-    res.json('Data berhasil ditambah')
+app.post('/pegawai',async(req,res) => {
+    try {
+        const {nama, alamat, jabatan, kontak, email, gaji, status} = req.body
+        await db.query(`insert into pegawai(nama, alamat, jabatan, kontak, email, gaji, status)
+         values('${nama}', '${alamat}', '${jabatan}', '${kontak}', '${email}', ${gaji}, ${status})`)
+        console.log(req.body)
+        res.json(req.body)
+    } catch (error) {
+        console.log(error)
+        res.json('error')
+    }
+  
 })
 // edit jabatan pegawai
-app.put('/pegawai',(req,res)=>{
+app.put('/pegawai',async(req,res)=>{
     const {nama, alamat, jabatan} = req.body
     const id = req.params.id
     
-    const resData = await db.query(`update pegawai set jabatan = '${jabatan}' where jabatan = '${jabatan}'`)
+     await db.query(`update pegawai set jabatan = '${jabatan}' where jabatan = '${jabatan}'`)
     res.json('data berhasil diubah')
 })
 // delete data pegawai by id
-app.delete('/pegawai/:id',(req,res)=>{
+app.delete('/pegawai/:id',async(req,res)=>{
     const id = req.params.id
-    const resData = await db.query(`DELETE FROM pegawai WHERE id = ${id}`)
+    await db.query(`DELETE FROM pegawai WHERE id = ${id}`)
     res.json('Data terhapus')
 })
 
