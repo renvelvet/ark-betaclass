@@ -1,9 +1,10 @@
 const Express = require('express')
 const bodyParser = require('body-parser')
+const cors = require('cors')
 
 const Pool = require('pg').Pool
 const app = Express()
-const port = 3000
+const port = 3001
 
 const db = new Pool({
     user: 'oiqcuocuhpeuco',
@@ -14,9 +15,10 @@ const db = new Pool({
     ssl: true
 })
 
-
+db.connect()
 app.use(bodyParser())
-// get seluruh pegawai
+app.use(cors())
+// get seluruh user
 app.get('/',async(req, res)=>{
     const resData = await db.query('select * from users')
     res.json(resData.rows)
@@ -54,4 +56,4 @@ app.delete('/:id',async(req,res)=>{
     res.json('Data terhapus')
 })
 
-app.listen(port, ()=>console.log('localhost:3000'))
+app.listen(port, ()=>console.log('localhost:3001'))
