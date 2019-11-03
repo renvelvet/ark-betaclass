@@ -13,58 +13,44 @@ const db = new Pool({
     port: 5432,
     ssl: true
 })
-  
-let data = [
-    {
-        id:1572072711104,
-        nama:'Ali',
-        umur:21,
-        alamat:'Bandung'
-    },
-    {
-        id:1572072711105,
-        nama:'Al',
-        umur:21,
-        alamat:'Bandung'
-    }
-]
+
 
 app.use(bodyParser())
+// get seluruh pegawai
 app.get('/',async(req, res)=>{
     const resData = await db.query('select * from users')
     res.json(resData.rows)
 })
+// get pegawai by id
 app.get('/:id',async(req, res)=>{
     const id = req.params.id
     const resData = await db.query(`select * from users where id=${id}`)
-    res.json(resData.rows[0])
+    res.json(resData.rows)
 })
-// menambah data
-app.post('/',(req,res) => {
-    const {nama, umur, alamat} = req.body
-    const id = Number(new Date)
-    console.log(req.body)
-    data.push({id, nama, umur, alamat})
-    res.json('Data berhasil ditambah')
-})
-// edit data
-app.put('/:id',(req,res)=>{
-    const {nama, umur, alamat} = req.body
-    const id = req.params.id
-    const index = data.findIndex(item=>item.id == id)
-    if(nama === undefined) {
-        data[index] = {...data[index], umur, alamat}
-    } else {
-        data[index] = {...data[index], nama, umur, alamat}
+// menambah data pegawai
+app.post('/',async(req,res) => {
+    try {
+        const {nama, umur, alamat} = req.body
+        await db.query(`insert into users(nama, umur, alamat)
+         values('${nama}', ${umur}, '${alamat}')`)
+        console.log(req.body)
+        res.json(req.body)
+    } catch (error) {
+        console.log(error)
+        res.json('error')
     }
+})
+// edit by nama
+app.put('/',async(req,res)=>{
+    const {nama, umur, alamat} = req.body
+    
+    await db.query(`update users set nama = '${nama}', umur = ${umur}, alamat = '${alamat}' where nama = '${nama}'`)
     res.json('data berhasil diubah')
 })
-// delete data
-app.delete('/:id',(req,res)=>{
-    const id = req.params.id
-    const newData = data.filter(item => item.id != id)
-    data = newData
-    console.log(newData)
+// delete by nama
+app.delete('/:nama',async(req,res)=>{
+    const nama = req.params.nama
+    await db.query(`DELETE FROM users WHERE nama = ${nama}`)
     res.json('Data terhapus')
 })
 
