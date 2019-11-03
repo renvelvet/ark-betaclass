@@ -40,17 +40,17 @@ app.post('/',async(req,res) => {
         res.json('error')
     }
 })
-// edit by nama
-app.put('/',async(req,res)=>{
+// edit by id
+app.put('/:id',async(req,res)=>{
     const {nama, umur, alamat} = req.body
-    
-    await db.query(`update users set nama = '${nama}', umur = ${umur}, alamat = '${alamat}' where nama = '${nama}'`)
+    const id = req.params.id
+    await db.query(`update users set nama = '${nama}', umur = ${umur}, alamat = '${alamat}' where id = ${id}`)
     res.json('data berhasil diubah')
 })
-// delete by nama
-app.delete('/:nama',async(req,res)=>{
-    const nama = req.params.nama
-    await db.query(`DELETE FROM users WHERE nama = ${nama}`)
+// delete by id
+app.delete('/:id',async(req,res)=>{
+    const id = req.params.id
+    await db.query(`DELETE FROM users WHERE id = ${id}`)
     res.json('Data terhapus')
 })
 
